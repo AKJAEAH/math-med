@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medium Matematik Bulmaca Oyunu</title>
+    <style>
+        body {
+            background-color: #383a38;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #soru {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #cevap {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        #mesaj {
+            font-size: 18px;
+            color: red;
+        }
+        #puan {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Matematik Bulmaca Oyunu</h1>
+    <div id="soru"></div>
+    <input type="text" id="cevap" placeholder="Cevabınızı girin">
+    <div id="mesaj"></div>
+    <div id="puan">Puan: 0</div>
+    <button onclick="soruyuSor()">Soru Sor</button>
+    <button onclick="cevabiKontrolEt()">Cevabı Kontrol Et</button>
+
+    <script>
+        let puan = 0;
+        const puanGoster = document.getElementById('puan');
+        const soruDiv = document.getElementById('soru');
+        const cevapInput = document.getElementById('cevap');
+        const mesajDiv = document.getElementById('mesaj');
+        let dogruCevap;
+
+        function rastgeleSayi(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function ortaSoru() {
+            const sayi1 = rastgeleSayi(1, 10);
+            const sayi2 = rastgeleSayi(1, 10);
+            const sayi3 = rastgeleSayi(1, 10);
+            const islemler = ['+', '-', '*', '/'];
+            const islem1 = islemler[rastgeleSayi(0, islemler.length - 1)];
+            const islem2 = islemler[rastgeleSayi(0, islemler.length - 1)];
+            let soruMetni = `(${sayi1} ${islem1} ${sayi2}) ${islem2} ${sayi3}`;
+            dogruCevap = eval(soruMetni);
+            return soruMetni;
+        }
+
+        function soruyuSor() {
+            const soru = ortaSoru();
+            soruDiv.textContent = soru;
+            mesajDiv.textContent = '';
+            cevapInput.value = '';
+            cevapInput.focus();
+        }
+
+        function cevabiKontrolEt() {
+            const verilenCevap = parseFloat(cevapInput.value);
+            if (verilenCevap === dogruCevap) {
+                puan++;
+                puanGoster.textContent = `Puan: ${puan}`;
+                mesajDiv.textContent = 'Doğru cevap!';
+            } else {
+                mesajDiv.textContent = 'Yanlış cevap. Tekrar deneyin.';
+            }
+            setTimeout(soruyuSor, 1000);
+        }
+    </script>
+</body>
+</html>
